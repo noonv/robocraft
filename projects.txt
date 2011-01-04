@@ -1,0 +1,8 @@
+//
+// list of projects
+//
+// robocraft.ru
+//
+
+
+zxdsl831 - project for research ADSL-modem: ZTE ZXDSL831AII (like D-link DSL-2500U)  
