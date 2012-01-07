@@ -1,0 +1,87 @@
+image.jpg 320x240
+
+function 		ms
+
+Intel Core i7 2.8GHz / WinXP / OpenCV 2.1 / VC 2008 - Debug
+
+cvConvertImage 		0.465374
+cvCanny 		6.471365
+cvSobel 		1.075805
+cvLaplace 		2.327466
+cvIntegral 		0.522026
+cvExtractSURF 		433.161987
+
+Intel Core i7 2.8GHz / WinXP / OpenCV 2.1 / VC 2008 - Release
+
+cvConvertImage 		0.115592
+cvCanny 		2.019475
+cvSobel 		0.155087
+cvLaplace 		0.437235
+cvIntegral 		0.123503
+cvExtractSURF 		115.979919
+cvSmooth 		0.322386
+cv::FAST 		3.910647
+cvGoodFeaturesToTrack 		3.879666
+
+Intel Core i7 2.8GHz / WinXP / Virtual Box - Ubuntu 10.10 / OpenCV 2.2.0
+
+cvConvertImage 		0.160027
+cvCanny 		2.059421
+cvSobel 		0.266141
+cvLaplace 		0.454562
+cvIntegral 		0.125565
+cvExtractSURF 		86.754013
+cvSmooth 		0.318583
+cv::FAST 		3.718944
+
+Intel Core 2 Duo CPU P9300 2.26GHz / Linux 2.6.30 / OpenCV 2.2.0
+
+cvConvertImage 		0.246101
+cvCanny 		3.239408
+cvSobel 		0.326020
+cvLaplace 		0.796756
+cvIntegral 		0.230013
+cvExtractSURF 		153.451370
+cvSmooth 		0.570008
+cv::FAST 		5.080717
+cvGoodFeaturesToTrack 		4.641660
+
+Intel Celeron 550 2.0GHz / WinXP / OpenCV 2.1 / VC 2008 Express - Release
+
+cvConvertImage 		0.205752
+cvCanny 		3.747979
+cvSobel 		0.551701
+cvLaplace 		1.563274
+cvIntegral 		0.270247
+cvExtractSURF 		220.028625
+
+ARMv7 (DM3730 - BeagleBoard xM) / Linux 3.0.4-x3 / OpenCV Version: 2.3.2
+
+cvConvertImage 		4.697266
+cvCanny 		15.791321
+cvSobel 		3.955688
+cvLaplace 		87.927551
+cvIntegral 		4.158936
+cvExtractSURF 		3947.886719
+
+Intel Core 2 Duo L7500 1.6GHz / Win XP / OpenCV 2.1 / VS 2008 - release
+
+cvConvertImage 		0.497979
+cvCanny 		4.367728
+cvSobel 		0.539373
+cvLaplace 		1.376594
+cvIntegral 		0.263338
+cvExtractSURF 		232.772797
+
+
+Intel Atom 330  1.60GHz / Linux 2.6.38-8-generic (Ubuntu 11.04) / OpenCV 2.3.1
+
+cvConvertImage 		1.274840
+cvCanny 		6.795469
+cvSobel 		0.908334
+cvLaplace 		2.981850
+cvIntegral 		1.536407
+cvExtractSURF 		697.280029
+cvSmooth 		2.086776
+cv::FAST 		9.948793
+cvGoodFeaturesToTrack 		21.354774  

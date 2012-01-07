@@ -1,0 +1,11 @@
+
+model name	: Intel(R) Core(TM) i7 CPU         860  @ 2.80GHz / Linux 2.6.35-22-generic / OpenCV Version: 2.2.0
+
+cvConvertImage 		0.141364
+cvCanny 		2.054621
+cvSobel 		0.140528
+cvLaplace 		0.686048
+cvIntegral 		0.149482
+cvExtractSURF 		86.477379
+cvSmooth 		0.318583
+cv::FAST 		3.718944

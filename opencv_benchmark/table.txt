@@ -1,0 +1,14 @@
+image.jpg 320x240								
+
+function 		ms						
+
+		Intel Core i7 2.8GHz / WinXP / OpenCV 2.1 / VC 2008 - Debug	Intel Core i7 2.8GHz / WinXP / OpenCV 2.1 / VC 2008 - Release	Intel Core i7 2.8GHz / WinXP / Virtual Box - Ubuntu 10.10 / OpenCV 2.2.0	Intel Core 2 Duo CPU P9300 2.26GHz / Linux 2.6.30 / OpenCV 2.2.0	Intel Celeron 550 2.0GHz / WinXP / OpenCV 2.1 / VC 2008 Express - Release	ARMv7 (DM3730 - BeagleBoard xM) / Linux 3.0.4-x3 / OpenCV Version: 2.3.	Intel Core 2 Duo L7500 1.6GHz / Win XP / OpenCV 2.1 / VS 2008 - release
+
+cvConvertImage 		0.465374	0.115592	0.160027	0.246101	0.205752	4.697266	0.497979
+cvCanny 		6.471365	2.019475	2.059421	3.239408	3.747979	15.791321	4.367728
+cvSobel 		1.075805	0.155087	0.266141	0.326020	0.551701	3.955688	0.539373
+cvLaplace 		2.327466	0.437235	0.454562	0.796756	1.563274	87.927551	1.376594
+cvIntegral 		0.522026	0.123503	0.125565	0.230013	0.270247	4.158936	0.263338
+cvExtractSURF 		433.161987	115.979919	86.754013	153.451370	220.028625	3947.886719	232.772797
+cvSmooth 			0.322386	0.318583				
+cv::FAST 			3.910647	3.718944				

@@ -1,0 +1,12 @@
+
+model name	: Intel(R) Core(TM)2 Duo CPU     P9300  @ 2.26GHz / Linux 2.6.30-std-def-alt15 / OpenCV Version: 2.2.0
+
+cvConvertImage 		0.245770
+cvCanny 		3.239287
+cvSobel 		0.320546
+cvLaplace 		0.799773
+cvIntegral 		0.231274
+cvExtractSURF 		153.442215
+cvSmooth 		0.570008
+cv::FAST 		5.080717
+cvGoodFeaturesToTrack 		4.641660

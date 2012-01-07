@@ -1,0 +1,12 @@
+
+model name	: Intel(R) Atom(TM) CPU  330   @ 1.60GHz / Linux 2.6.38-8-generic / OpenCV 2.3.1
+
+cvConvertImage 		1.274840
+cvCanny 		6.795469
+cvSobel 		0.908334
+cvLaplace 		2.981850
+cvIntegral 		1.536407
+cvExtractSURF 		697.280029
+cvSmooth 		2.086776
+cv::FAST 		9.948793
+cvGoodFeaturesToTrack 		21.354774
