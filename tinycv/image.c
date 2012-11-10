@@ -123,6 +123,227 @@ int image_save(image* img, const char* filename)
     return 0;
 }
 
+int image_rgb2gray(image* _src, image* _dst)
+{
+    if(!_src || !_dst) {
+        return -1;
+    }
+
+    if(_src->n_channels != 3 && _dst->n_channels != 1) {
+        fprintf(stderr, "[!][image_rgb2gray] Error: bad images!\n");
+        return -1;
+    }
+
+    if(_src->width != _dst->width ||
+       _src->height != _dst->height) {
+        return -1;
+    }
+
+    int i;
+    int counter;
+    unsigned char* src = (unsigned char*)_src->data;
+    unsigned char* dst = (unsigned char*)_dst->data;
+
+    // GRAY = 0.299*R + 0.587*G + 0.114*B
+    counter=0;
+    for(i=0; i<(_src->size-2); i+=3) {
+        //float temp = 0.2989f * src[i] + 0.5870f * src[i + 1] + 0.1140f * src[i + 2]; //RGB
+        float temp = 0.2989f * src[i+2] + 0.5870f * src[i + 1] + 0.1140f * src[i]; //BGR
+        dst[counter++] = temp;
+    }
+
+    return 0;
+}
+
+int image_gray2rgb(image* _src, image* _dst)
+{
+    if(!_src || !_dst) {
+        return -1;
+    }
+
+    if(_src->n_channels != 1 && _dst->n_channels != 3) {
+        fprintf(stderr, "[!][image_gray2rgb] Error: bad images!\n");
+        return -1;
+    }
+
+    if(_src->width != _dst->width ||
+       _src->height != _dst->height) {
+        return -1;
+    }
+
+    int i;
+    int counter;
+    unsigned char* src = (unsigned char*)_src->data;
+    unsigned char* dst = (unsigned char*)_dst->data;
+
+    for(i=0; i<_src->size; i++) {
+        dst[counter] = src[i];
+        dst[counter+1] = src[i];
+        dst[counter+2] = src[i];
+        counter += 3;
+    }
+
+    return 0;
+}
+
+int image_rgb2hsv(image* _src, image* _dst)
+{
+    if(!_src || !_dst) {
+        return -1;
+    }
+
+    if(_src->n_channels != 3 || _dst->n_channels != 3) {
+        fprintf(stderr, "[!][image_rgb2hsv] Error: bad images!\n");
+        return -1;
+    }
+
+    if(_src->width != _dst->width ||
+       _src->height != _dst->height) {
+        return -1;
+    }
+
+    int i;
+    unsigned char* src = (unsigned char*)_src->data;
+    unsigned char* dst = (unsigned char*)_dst->data;
+
+    float H, S, V, min, max, delta;
+    float R, G, B;
+    for(i=0; i<(_src->size-2); i+=3) {
+        // BGR
+        B = src[i]/255.0;
+        G = src[i+1]/255.0;
+        R = src[i+2]/255.0;
+
+        //------------------
+        min = R < G ? R : G;
+        min = min  < B ? min  : B;
+
+        max = R > G ? R : G;
+        max = max  > B ? max  : B;
+
+        V = max;
+
+        delta = max - min;
+
+        if( max > 0.0 ) {
+            S = (delta / max);
+        }
+        else {
+            S = 0.0;
+            H = 0;  // its now undefined
+            dst[i] = dst[i+1] = dst[i+2] = 0;
+            return 0;
+        }
+
+        if( R >= max )
+            H = (G - B) / delta;        // between yellow & magenta
+        else if( G >= max )
+            H = 2.0 + (B - R) / delta;  // between cyan & yellow
+        else
+            H = 4.0 + (R - G) / delta;  // between magenta & cyan
+
+        H *= 60.0;  // degrees
+
+        if( H < 0.0 )
+            H += 360.0;
+
+        dst[i] = (unsigned char)(H/2.0);
+        dst[i+1] = (unsigned char)(S*UCHAR_MAX);
+        dst[i+2] = (unsigned char)(V*UCHAR_MAX);
+        //------------------
+    }
+
+    return 0;
+}
+
+int image_hsv2rgb(image* _src, image* _dst)
+{
+    if(!_src || !_dst) {
+        return -1;
+    }
+
+    if(_src->n_channels != 3 || _dst->n_channels != 3) {
+        fprintf(stderr, "[!][image_hsv2rgb] Error: bad images!\n");
+        return -1;
+    }
+
+    if(_src->width != _dst->width ||
+       _src->height != _dst->height) {
+        return -1;
+    }
+
+    int i;
+    unsigned char* src = (unsigned char*)_src->data;
+    unsigned char* dst = (unsigned char*)_dst->data;
+
+    float H, S, V;
+    float R, G, B;
+
+    float hh, p, q, t, ff;
+    long ii;
+
+    for(i=0; i<(_src->size-2); i+=3) {
+        H = src[i]*2;
+        S = src[i+1]/255.0;
+        V = src[i+2]/255.0;
+
+//        if(S <= 0.0) {
+//            dst[i] = dst[i+1] = dst[i+2] = (unsigned char)(V*UCHAR_MAX);
+//            return 0;
+//        }
+
+        hh = H;
+        if(hh >= 360.0)
+            hh = 0.0;
+        hh /= 60.0;
+        ii = (long)hh;
+        ff = hh - ii;
+        p = V * (1.0 - S);
+        q = V * (1.0 - (S * ff));
+        t = V * (1.0 - (S * (1.0 - ff)));
+
+        switch(ii) {
+        case 0:
+            R = V;
+            G = t;
+            B = p;
+            break;
+        case 1:
+            R = q;
+            G = V;
+            B = p;
+            break;
+        case 2:
+            R = p;
+            G = V;
+            B = t;
+            break;
+        case 3:
+            R = p;
+            G = q;
+            B = V;
+            break;
+        case 4:
+            R = t;
+            G = p;
+            B = V;
+            break;
+        case 5:
+        default:
+            R = V;
+            G = p;
+            B = q;
+            break;
+        }
+
+        dst[i] = (unsigned char)(B*UCHAR_MAX);
+        dst[i+1] = (unsigned char)(G*UCHAR_MAX);
+        dst[i+2] = (unsigned char)(R*UCHAR_MAX);
+    }
+
+    return 0;
+}
+
 int image_convert_color(image* _src, image* _dst, int type)
 {
     if(!_src || !_dst) {
@@ -130,33 +351,26 @@ int image_convert_color(image* _src, image* _dst, int type)
         return -1;
     }
 
-    int i,j, counter;
-    unsigned char* src = (unsigned char*)_src->data;
-    unsigned char* dst = (unsigned char*)_dst->data;
-
     switch (type) {
     case CV_RGB2GRAY:
         // RGB to Gray
-
-        if(_src->n_channels != 3 && _dst->n_channels != 1) {
-            fprintf(stderr, "[!][image_convert_color] Error: bad images for CV_RGB2GRAY!\n");
-            return -1;
-        }
-
-        // GRAY = 0.299*R + 0.587*G + 0.114*B
-        counter=0;
-        for(i=0; i<(_src->size-2); i+=3) {
-            //float temp = 0.2989f * src[i] + 0.5870f * src[i + 1] + 0.1140f * src[i + 2]; //RGB
-            float temp = 0.2989f * src[i+2] + 0.5870f * src[i + 1] + 0.1140f * src[i]; //BGR
-            dst[counter++] = temp;
-        }
-
+        return image_rgb2gray(_src, _dst);
         break;
     default:
         break;
     }
 
     return 0;
+}
+
+image* image_clone(image* src)
+{
+    if(!src)
+        return NULL;
+
+    image* img = image_create(src->width, src->height, src->n_channels, src->type);
+    image_copy(src, img);
+    return img;
 }
 
 int image_copy(image* src, image* dst)

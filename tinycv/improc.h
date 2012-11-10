@@ -10,12 +10,6 @@
 
 /* image routines */
 
-enum {CV_BORDER_CONSTANT=0, CV_BORDER_REPLICATE};
-
-cv_point _cv_point(int x, int y);
-cv_scalar _cv_scalar(float val0, float val1, float val2, float val3);
-cv_scalar _cv_scalar_all(float val0);
-
 // set image to zero
 int image_zero(image* src);
 
@@ -24,6 +18,8 @@ int image_set(image* src, cv_scalar value);
 
 // convert image from float to uchar
 int image_float2uchar(image* src, image** dst, float min, float max);
+
+enum {CV_BORDER_CONSTANT=0, CV_BORDER_REPLICATE};
 
 // make image border  (cvCopyMakeBorder)
 int image_border(image* src, image* dst, cv_point offset, int border_type, cv_scalar value);

@@ -7,27 +7,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-cv_point _cv_point(int x, int y)
-{
-    cv_point p;
-    p.x=x; p.y=y;
-    return p;
-}
-
-cv_scalar _cv_scalar(float val0, float val1, float val2, float val3)
-{
-    cv_scalar s;
-    s.val[0]=val0; s.val[1]=val1; s.val[2]=val2; s.val[3]=val3;
-    return s;
-}
-
-cv_scalar _cv_scalar_all(float val0)
-{
-    cv_scalar s;
-    s.val[0]=s.val[1]=s.val[2]=s.val[3]=val0;
-    return s;
-}
-
 // set image to zero
 int image_zero(image* src)
 {

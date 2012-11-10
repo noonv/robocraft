@@ -9,8 +9,8 @@
 #include "image.h"
 #include "improc.h"
 
-#include "kmenscolorer.h"
-
 #include "videocapture.h"
+
+#include "kmenscolorer.h"
 
 #endif /* #ifndef TINYCV_H */

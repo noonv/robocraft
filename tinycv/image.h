@@ -42,10 +42,16 @@ image* image_load(const char* filename);
 
 int image_save(image* img, const char* filename);
 
+int image_rgb2gray(image* src, image* dst);
+int image_gray2rgb(image* src, image* dst);
+int image_rgb2hsv(image* src, image* dst);
+int image_hsv2rgb(image* src, image* dst);
+
 enum {CV_RGB2GRAY=0};
 
 int image_convert_color(image* src, image* dst, int type);
 
+image* image_clone(image* src);
 int image_copy(image* src, image* dst);
 
 void image_rotate180(image *src);
