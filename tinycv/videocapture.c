@@ -168,6 +168,7 @@ int videocapture_open_device (videocapture_dev* dev)
 void videocapture_close_device(videocapture_dev* dev)
 {
     if(!dev) return;
+    if(dev->fd<0) return;
 
     if (-1 == close (dev->fd))
         errno_exit ("close");
@@ -416,6 +417,7 @@ void videocapture_start_capturing(videocapture_dev* dev)
 void videocapture_stop_capturing(videocapture_dev* dev)
 {
     if(!dev) return;
+    if(dev->fd<0) return;
 
     enum v4l2_buf_type type;
 

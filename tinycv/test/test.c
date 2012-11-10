@@ -43,19 +43,26 @@ int main(int argc, char* argv[])
 
     if(!img) {
         printf("[!] Error: image_create()\n");
+        return -1;
     }
-
-    printf("[i] image size: %dx%dx%d (%d)\n", img->width, img->height, img->n_channels, img->size);
+    image_delete(&img);
 
     // test image loading
     image* img2 = image_load(filename);
+    printf("[i] image size: %dx%dx%d (%d)\n", img2->width, img2->height, img2->n_channels, img2->size);
     image_save(img2, "test2_load_save.bmp");
 
     printf("[i] == Tests == \n");
 #if 1
+    // copy
+    printf("[i] image_copy \n");
+    img = image_create(img2->width, img2->height, img2->n_channels, CV_DEPTH_8U);
+    image_copy(img2, img);
+    image_save(img, "test2_copy.bmp");
+
     // test convert image to grayscale
     printf("[i] image_convert_color \n");
-    image* img_gray = image_create(320, 240, 1, CV_DEPTH_8U);
+    image* img_gray = image_create(img2->width, img2->height, 1, CV_DEPTH_8U);
     gettimeofday(&t0, NULL);
     image_convert_color(img2, img_gray, CV_RGB2GRAY);
     gettimeofday(&t1, NULL);
@@ -79,7 +86,7 @@ int main(int argc, char* argv[])
 
     // threshold
     printf("[i] image_threshold \n");
-    image* img_thr = image_create(320, 240, 1, CV_DEPTH_8U);
+    image* img_thr = image_create(img2->width, img2->height, 1, CV_DEPTH_8U);
     gettimeofday(&t6, NULL);
     image_threshold(img_gray, img_thr, 60);
     gettimeofday(&t7, NULL);
@@ -130,9 +137,16 @@ int main(int argc, char* argv[])
     gettimeofday(&t10, NULL);
     colors_count = image_kmeans_colorer(img_small, img_kmeanes, img_kmeanes_idx, clusters, cluster_count);
     gettimeofday(&t11, NULL);
-    printf("[i] colors count: %d\n", colors_count);
 
+    printf("[i] colors count: %d\n", colors_count);
     image_save(img_kmeanes, "test_kmeanscolorer.bmp");
+
+#if 0
+    print_color_clusters(clusters, CLUSTER_COUNT);
+    printf("[i] === colors clusters after sort:\n");
+    sort_color_clusters_by_count(clusters, CLUSTER_COUNT);
+    print_color_clusters(clusters, CLUSTER_COUNT);
+#endif
 
     image_delete(&img_kmeanes);
     image_delete(&img_kmeanes_idx);
@@ -146,8 +160,8 @@ int main(int argc, char* argv[])
 #if 1
     // HSV
     printf("[i] image_hsv2rgb \n");
-    image* img_hsv = image_create(320, 240, 3, CV_DEPTH_8U);
-    image* img_bgr = image_create(320, 240, 3, CV_DEPTH_8U);
+    image* img_hsv = image_create(img2->width, img2->height, 3, CV_DEPTH_8U);
+    image* img_bgr = image_create(img2->width, img2->height, 3, CV_DEPTH_8U);
 
     gettimeofday(&t12, NULL);
     image_rgb2hsv(img2, img_hsv);
@@ -165,8 +179,8 @@ int main(int argc, char* argv[])
 #if 1
     // hsv colorer
     printf("[i] image_hsv_colorer \n");
-    image* img_hsv_col = image_create(320, 240, 3, CV_DEPTH_8U);
-    image* img_hsv_idx = image_create(320, 240, 1, CV_DEPTH_8U);
+    image* img_hsv_col = image_create(img2->width, img2->height, 3, CV_DEPTH_8U);
+    image* img_hsv_idx = image_create(img2->width, img2->height, 1, CV_DEPTH_8U);
 
 #define COLORS_COUNT 10
     cv_color_cluster clusters2[COLORS_COUNT];
@@ -177,6 +191,13 @@ int main(int argc, char* argv[])
 
     printf("[i] colors count: %d\n", colors_count);
     image_save(img_hsv_col, "test_hsvcolorer.bmp");
+
+#if 1
+    print_color_clusters(clusters2, COLORS_COUNT);
+    printf("[i] === colors clusters after sort:\n");
+    sort_color_clusters_by_count(clusters2, COLORS_COUNT);
+    print_color_clusters(clusters2, COLORS_COUNT);
+#endif
 
     image_delete(&img_hsv_col);
     image_delete(&img_hsv_idx);
@@ -192,7 +213,7 @@ int main(int argc, char* argv[])
     print_performance("image_rgb2hsv", t13, t12);
     print_performance("image_hsv_colorer", t15, t14);
 
-    image_delete(&img);    
+    image_delete(&img);
     image_delete(&img2);
 #if 1
     image_delete(&img_gray);

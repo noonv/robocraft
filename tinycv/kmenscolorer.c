@@ -18,12 +18,6 @@ float rgb_euclidean(cv_scalar p1, cv_scalar p2)
     return val;
 }
 
-// for sort via qsort()
-static int sort_cv_color_cluster(const void *p1, const void *p2)
-{
-    return ( ((cv_color_cluster *)p1)->count - ((cv_color_cluster *)p2)->count );
-}
-
 // define dominate colors on image by k-meanes algorithm
 int image_kmeans_colorer(image* src, image* dst, image* cluster_indexes, cv_color_cluster* clusters, int cluster_count)
 {
@@ -120,7 +114,7 @@ int image_kmeans_colorer(image* src, image* dst, image* cluster_indexes, cv_colo
     // show colors
     for(k=0; k<cluster_count; k++) {
         if(clusters[k].count != 0) {
-#if 1
+#if 0
             printf("[i] color: %d (R: %03d G: %03d B: %03d) - %d\n", clusters[k].id,
                    (int)clusters[k].color.val[2],
                    (int)clusters[k].color.val[1],
@@ -248,7 +242,7 @@ int image_hsv_colorer(image* src, image* dst, image* cluster_indexes, cv_color_c
     int colors_count = 0;
     for(i=0; i<NUM_COLOR_TYPES; i++) {
         if(clusters[i].count != 0) {
-#if 1
+#if 0
             printf("[i] color: %d %s (R: %03d G: %03d B: %03d) - %d\n", clusters[i].id,
                    sCTypes[i],
                    (int)clusters[i].new_color.val[2],
@@ -268,3 +262,35 @@ int image_hsv_colorer(image* src, image* dst, image* cluster_indexes, cv_color_c
 
     return colors_count;
 }
+
+// for sort via qsort()
+static int sort_cv_color_cluster(const void *p1, const void *p2)
+{
+    return ( ((cv_color_cluster *)p2)->count - ((cv_color_cluster *)p1)->count );
+}
+
+int sort_color_clusters_by_count(cv_color_cluster* clusters, int cluster_count)
+{
+    if(!clusters || cluster_count <= 0)
+        return -1;
+
+    qsort(clusters, cluster_count, sizeof(cv_color_cluster), sort_cv_color_cluster);
+
+    return 0;
+}
+
+void print_color_clusters(cv_color_cluster* clusters, int cluster_count)
+{
+    if(!clusters || cluster_count <= 0)
+        return;
+
+    int i;
+    for(i=0; i<cluster_count; i++) {
+        printf("[i] color: %d (R: %03d G: %03d B: %03d) - %d\n", clusters[i].id,
+               (int)clusters[i].new_color.val[2],
+               (int)clusters[i].new_color.val[1],
+               (int)clusters[i].new_color.val[0],
+               clusters[i].count );
+    }
+}
+

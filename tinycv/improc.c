@@ -392,7 +392,7 @@ void image_resize(image* _src, image* _dst)
     int step_x = _src->width / _dst->width;
     int step_y = _src->height / _dst->height;
     int step_val = step_x*step_y;
-    printf("[i][image_resize] %d %d %d\n", step_x, step_y, step_val);
+    //printf("[i] [image_resize] %d %d %d\n", step_x, step_y, step_val);
     for (y = 0, j=0; y < _src->height; y++) {
         for (x = 0, i=0; x < _src->width; x++) {
             //printf("[i] %d %d %d %d\n", x, y, i, j);

@@ -67,4 +67,8 @@ int hsv_get_pixel_color_type(int H, int S, int V);
 // define dominate colors on image by HSV-colors
 int image_hsv_colorer(image* src, image* dst, image* cluster_indexes, cv_color_cluster* clusters, int cluster_count);
 
+int sort_color_clusters_by_count(cv_color_cluster* clusters, int cluster_count);
+
+void print_color_clusters(cv_color_cluster* clusters, int cluster_count);
+
 #endif /* #ifndef KMEANSCOLORER_H */

@@ -22,24 +22,24 @@ image* image_create(int width, int height, int n_channels, int type)
     img->n_channels = n_channels;
     img->type = type;
     img->size = width*height*n_channels;
-    switch(type)
-    {
+    img->step = width*img->n_channels;
+    switch(type) {
     case CV_DEPTH_8S:
         img->size *= sizeof(char);
-        img->step = width*img->n_channels*sizeof(char);
+        img->step *= sizeof(char);
         break;
     case CV_DEPTH_16S:
         img->size *= sizeof(short);
-        img->step = width*img->n_channels*sizeof(short);
+        img->step *= sizeof(short);
         break;
     case CV_DEPTH_32F:
         img->size *= sizeof(float);
-        img->step = width*img->n_channels*sizeof(float);
+        img->step *= sizeof(float);
         break;
     case CV_DEPTH_8U:
     default:
         img->size *= sizeof(unsigned char);
-        img->step = width*img->n_channels*sizeof(unsigned char);
+        img->step *= sizeof(unsigned char);
         break;
     }
     img->data = malloc(img->size);
@@ -48,6 +48,7 @@ image* image_create(int width, int height, int n_channels, int type)
         free(img);
         return NULL;
     }
+    memset(img->data, 0, img->size);
     return img;
 }
 
