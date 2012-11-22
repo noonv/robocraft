@@ -107,6 +107,7 @@ int main(int argc, char* argv[])
 #endif // rotate180
 
     int colors_count;
+    cv_point center;
 
 #if 1
     // simple resize
@@ -197,11 +198,18 @@ int main(int argc, char* argv[])
     printf("[i] === colors clusters after sort:\n");
     sort_color_clusters_by_count(clusters2, COLORS_COUNT);
     print_color_clusters(clusters2, COLORS_COUNT);
-#endif
+
+    center = get_color_center(clusters2[0].id, img_hsv_idx);
+    printf("[i] first color center:  %03d %03d\n", center.x, center.y);
+    center = get_color_center(clusters2[1].id, img_hsv_idx);
+    printf("[i] second color center: %03d %03d\n", center.x, center.y);
+    center = get_color_center(clusters2[2].id, img_hsv_idx);
+    printf("[i] third color center:  %03d %03d\n", center.x, center.y);
+#endif // print_color_clusters
 
     image_delete(&img_hsv_col);
     image_delete(&img_hsv_idx);
-#endif // k-meanes colorer
+#endif // hsv colorer
 
     printf("[i] == Performance == \n");
     print_performance("image_convert_color", t1, t0);

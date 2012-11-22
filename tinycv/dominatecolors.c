@@ -2,7 +2,7 @@
  * TinyCV
  */
 
-#include "kmenscolorer.h"
+#include "dominatecolors.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -294,3 +294,29 @@ void print_color_clusters(cv_color_cluster* clusters, int cluster_count)
     }
 }
 
+cv_point get_color_center(int color_index, image* cluster_indexes)
+{
+    cv_point res = _cv_point(-1, -1);
+    if(!cluster_indexes || color_index < 0)
+        return res;
+
+    int x,y;
+    float xc=0, yc=0;
+    int count=0;
+    for (y=0; y<cluster_indexes->height; y++) {
+        for (x=0; x<cluster_indexes->width; x++) {
+            if(CV_PIXEL(CVTYPE_DEPTH_8U, cluster_indexes, x, y)[0] == color_index) {
+                xc += x;
+                yc += y;
+                count++;
+            }
+        }
+    }
+    xc /= count;
+    yc /= count;
+
+    res.x = (int)xc;
+    res.y = (int)yc;
+
+    return res;
+}

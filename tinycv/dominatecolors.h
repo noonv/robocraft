@@ -2,8 +2,8 @@
  * TinyCV
  */
 
-#ifndef KMEANSCOLORER_H
-#define KMEANSCOLORER_H
+#ifndef DOMINATECOLORS_H
+#define DOMINATECOLORS_H
 
 #include "tinycvtypes.h"
 #include "image.h"
@@ -71,4 +71,6 @@ int sort_color_clusters_by_count(cv_color_cluster* clusters, int cluster_count);
 
 void print_color_clusters(cv_color_cluster* clusters, int cluster_count);
 
-#endif /* #ifndef KMEANSCOLORER_H */
+cv_point get_color_center(int color_index, image* cluster_indexes);
+
+#endif /* #ifndef DOMINATECOLORS_H */

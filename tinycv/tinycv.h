@@ -11,6 +11,6 @@
 
 #include "videocapture.h"
 
-#include "kmenscolorer.h"
+#include "dominatecolors.h"
 
 #endif /* #ifndef TINYCV_H */
