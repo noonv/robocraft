@@ -26,7 +26,8 @@ HEADERS  += mainwindow.h \
 #    curvedata.h \
 #    signaldata.h
     curvedata.h \
-    serial.h
+    serial.h \
+    definitions.h
 
 FORMS    += mainwindow.ui \
 

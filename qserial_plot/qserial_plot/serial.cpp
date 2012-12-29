@@ -65,7 +65,7 @@ int Serial::open(const char* name, int rate)
 		return -1;
 
 	close();
-	if(name!=port_name)
+    if(name != port_name)
 	{
 		snprintf(port_name, SERIAL_NAME_BUF_SIZE, "%s", name);
 	}
@@ -75,8 +75,8 @@ int Serial::open(const char* name, int rate)
 
 	COMMCONFIG cfg;
 	COMMTIMEOUTS timeouts;
-	int got_default_cfg=0, port_num;
-	char buf[SERIAL_NAME_BUF_SIZE], name_createfile[SERIAL_NAME_BUF_SIZE], name_commconfig[SERIAL_NAME_BUF_SIZE], *p;
+    int got_default_cfg=0, port_num=0;
+    char buf[SERIAL_NAME_BUF_SIZE]={0}, name_createfile[SERIAL_NAME_BUF_SIZE]={0}, name_commconfig[SERIAL_NAME_BUF_SIZE]={0}, *p=0;
 	DWORD len;
 
 	snprintf(buf, SERIAL_NAME_BUF_SIZE, "%s", port_name);
@@ -106,6 +106,7 @@ int Serial::open(const char* name, int rate)
 	else
 	{
 		printf("[!][serial][open] Error: GetDefaultCommConfig\n");
+        return -1;
 	}
 
 	port_handle = CreateFile(name_createfile, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, is_overlapped ? FILE_FLAG_OVERLAPPED : 0, NULL);

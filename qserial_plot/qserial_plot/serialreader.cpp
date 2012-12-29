@@ -14,14 +14,10 @@ SerialReader::~SerialReader()
 
 int SerialReader::init()
 {
-    serial_name = SERIAL_PORT_NAME;
+    serial_name = QString(SERIAL_PORT_NAME);
     serial_rate = SERIAL_RATE;
 
-    int res = d_serial.open(serial_name.toLocal8Bit().data(), serial_rate);
-    if(res)
-        fprintf(stderr, "[!] Cant open port: %s\n", serial_name.toLocal8Bit().data());
-
-    return res;
+    return open(serial_name, serial_rate);
 }
 
 void SerialReader::run()
@@ -30,8 +26,11 @@ void SerialReader::run()
     char buf[2048];
     int buf_size = 0;
 
+    m_stop = false;
+
     while (!m_stop) {
-        if(d_serial.waitInput(1000)) {
+        //qDebug(".");
+        if(d_serial.waitInput(200)) {
             if( (res = d_serial.available()) > 0 ) {
                 if(res+buf_size < sizeof(buf)) {
                     res = d_serial.read(buf+buf_size, res);
@@ -49,11 +48,42 @@ void SerialReader::run()
             }
         }
     }
+    d_serial.close();
 }
 
 void SerialReader::stop()
 {
     m_stop = true;
+}
+
+int SerialReader::open(const QString &port_name, int port_rate)
+{
+    if(port_name.length() <= 0 || port_rate <= 0)
+        return -1;
+
+    char s_name[256] = {0};
+    strncpy(s_name, port_name.toLocal8Bit().data(), sizeof(s_name));
+
+    int res = d_serial.open(s_name, port_rate);
+    qDebug("[i] open serial %s %d res=%d", s_name, port_rate, res);
+    if(res)
+        fprintf(stderr, "[!] Cant open port: %s\n", s_name);
+    else {
+        serial_name = port_name;
+        serial_rate = port_rate;
+    }
+
+    return res;
+}
+
+int SerialReader::close()
+{
+    return d_serial.close();
+}
+
+int SerialReader::is_serial_opened()
+{
+    return d_serial.connected();
 }
 
 int SerialReader::parse_buf(char *buf, int &buf_size)

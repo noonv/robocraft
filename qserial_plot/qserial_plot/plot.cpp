@@ -13,44 +13,8 @@
 
 Plot::Plot(QWidget *parent):
     QwtPlot( parent )
-    ,d_paintedPoints(0), d_interval(0.0, 10.0), d_timerId(-1)
+  ,d_paintedPoints(0), d_interval(0.0, 10.0), d_timerId(-1), is_autointerval(false)
 {
-
-#if 0
-
-    // panning with the left mouse button
-    (void) new QwtPlotPanner( canvas() );
-
-    // zoom in/out with the wheel
-    (void) new QwtPlotMagnifier( canvas() );
-
-    setAutoFillBackground( true );
-    setPalette( QPalette( QColor( 238, 238, 238 ) ) );
-    updateGradient();
-
-    //   setTitle("Test");
-    insertLegend(new QwtLegend(), QwtPlot::RightLegend);
-
-    // axes
-    setAxisTitle(xBottom, "x" );
-    setAxisScale(xBottom, 0.0, 300.0);
-
-    setAxisTitle(yLeft, "y");
-    setAxisScale(yLeft, -10.0, 80.0);
-
-    // canvas
-    canvas()->setLineWidth( 1 );
-    canvas()->setFrameStyle( QFrame::Box | QFrame::Plain );
-    canvas()->setBorderRadius( 10 );
-
-    QPalette canvasPalette( Qt::white );
-    canvasPalette.setColor( QPalette::Foreground, QColor( 238, 238, 238 ) );
-    canvas()->setPalette( canvasPalette );
-
-    populate();
-
-#else
-
     d_directPainter = new QwtPlotDirectPainter();
 
     setAutoReplot(false);
@@ -90,7 +54,7 @@ Plot::Plot(QWidget *parent):
 
     setAxisTitle(QwtPlot::xBottom, "Time [s]");
     setAxisScale(QwtPlot::xBottom, d_interval.minValue(), d_interval.maxValue());
-    setAxisScale(QwtPlot::yLeft, 0.0, 100.0);
+    setAxisScale(QwtPlot::yLeft, PLOT_MIN_Y, PLOT_MAX_Y);
 
     QwtPlotGrid *grid = new QwtPlotGrid();
     grid->setPen(QPen(Qt::gray, 0.0, Qt::DotLine));
@@ -118,10 +82,6 @@ Plot::Plot(QWidget *parent):
 
     d_curve->setData(&curvedata);
     d_curve->attach(this);
-
-    //create_curve();
-#endif
-
 }
 
 Plot::~Plot()
@@ -157,30 +117,6 @@ void Plot::appendPoint(double u)
     //setAxisScale(QwtPlot::yLeft, curvedata.boundingRect().y()-30, curvedata.boundingRect().y()+30);
 
     updateCurve();
-}
-
-void Plot::populate()
-{
-    // Insert markers
-
-    //  ...a horizontal line at y = 0...
-    QwtPlotMarker *mY = new QwtPlotMarker();
-    //mY->setLabel(QString::fromLatin1("y = 0"));
-    //mY->setLabelAlignment(Qt::AlignRight|Qt::AlignTop);
-    mY->setLineStyle(QwtPlotMarker::HLine);
-    mY->setLinePen(QPen(Qt::black, 0, Qt::DotLine));
-    mY->setYValue(0.0);
-    mY->attach(this);
-
-    //  ...a vertical line at x = 2 * pi
-    QwtPlotMarker *mX = new QwtPlotMarker();
-    //mX->setLabel(QString::fromLatin1("x = 2 pi"));
-    //mX->setLabelAlignment(Qt::AlignLeft | Qt::AlignBottom);
-    //mX->setLabelOrientation(Qt::Vertical);
-    mX->setLineStyle(QwtPlotMarker::VLine);
-    mX->setLinePen(QPen(Qt::black, 0, Qt::DotLine));
-    mX->setXValue(0.0);
-    mX->attach(this);
 }
 
 void Plot::initGradient()
@@ -232,6 +168,25 @@ void Plot::updateCurve()
     }
 }
 
+void Plot::setIntervalLength(double interval)
+{
+    if ( interval > 0.0 && interval != d_interval.width() ) {
+        d_interval.setMaxValue(d_interval.minValue() + interval);
+        setAxisScale(QwtPlot::xBottom,
+            d_interval.minValue(), d_interval.maxValue());
+
+        replot();
+    }
+}
+
+void Plot::setAutointerval(bool val)
+{
+    is_autointerval = val;
+    if(!is_autointerval) {
+        setAxisScale(QwtPlot::yLeft, PLOT_MIN_Y, PLOT_MAX_Y);
+    }
+}
+
 void Plot::incrementInterval()
 {
     d_interval = QwtInterval(d_interval.maxValue(),
@@ -252,8 +207,10 @@ void Plot::incrementInterval()
         }
         setAxisScaleDiv(QwtPlot::xBottom, scaleDiv);
 
-        double y_delta = curvedata.boundingRect().width()<1?2:5*curvedata.boundingRect().width();
-        setAxisScale(QwtPlot::yLeft, curvedata.boundingRect().y()-y_delta, curvedata.boundingRect().y()+y_delta);
+        if(is_autointerval) {
+            double y_delta = curvedata.boundingRect().width()<1?2:5*curvedata.boundingRect().width();
+            setAxisScale(QwtPlot::yLeft, curvedata.boundingRect().y()-y_delta, curvedata.boundingRect().y()+y_delta);
+        }
 
         d_origin->setValue(d_interval.minValue() + d_interval.width() / 2.0, 0.0);
 

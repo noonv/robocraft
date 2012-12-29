@@ -3,10 +3,8 @@
 
 #include <QThread>
 
+#include "definitions.h"
 #include "serial.h"
-
-#define SERIAL_PORT_NAME "COM10"
-#define SERIAL_RATE 115200
 
 class SerialReader : public QThread
 {
@@ -18,9 +16,12 @@ public:
     void run();
     void stop();
 
+    int open(const QString &port_name, int port_rate);
+    int close();
+    int is_serial_opened();
+
     int parse_buf(char* buf, int &buf_size);
     void move_data_in_buffer(char* buf, int beg, int& end);
-
     void append_data(double elapsed);
     
 signals:
