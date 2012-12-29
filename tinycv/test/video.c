@@ -13,6 +13,9 @@
 
 struct timeval t0, t1, t2, t3;
 
+#define VIDEO_WIDTH 160 //320
+#define VIDEO_HEIGHT 120 //240
+
 void print_performance(const char* str, struct timeval t2, struct timeval t1)
 {
     if(!str)
@@ -31,10 +34,10 @@ int main(int argc, char* argv[])
 {
     printf("[i] Start...\n");
 	
-    image* img = image_create(320, 240, 3, CV_DEPTH_8U);
-    image* img_gray = image_create(320, 240, 1, CV_DEPTH_8U);
-    image* img_color = image_create(320, 240, 3, CV_DEPTH_8U);
-    image* img_color_idx = image_create(320, 240, 1, CV_DEPTH_8U);
+    image* img = image_create(VIDEO_WIDTH, VIDEO_HEIGHT, 3, CV_DEPTH_8U);
+    image* img_gray = image_create(VIDEO_WIDTH, VIDEO_HEIGHT, 1, CV_DEPTH_8U);
+    image* img_color = image_create(VIDEO_WIDTH, VIDEO_HEIGHT, 3, CV_DEPTH_8U);
+    image* img_color_idx = image_create(VIDEO_WIDTH, VIDEO_HEIGHT, 1, CV_DEPTH_8U);
 
     if(!img) {
         printf("[!] Error: image_create()\n");
@@ -42,7 +45,10 @@ int main(int argc, char* argv[])
 
     int res = 0;
     videocapture_dev dev;
+    memset(&dev, 0, sizeof(dev));
 
+    dev.width = VIDEO_WIDTH;
+    dev.height = VIDEO_HEIGHT;
     videocapture_init("/dev/video0", &dev);
 
     res = videocapture_open(&dev);

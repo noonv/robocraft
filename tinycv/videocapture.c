@@ -114,8 +114,10 @@ void videocapture_init(const char* name, videocapture_dev* dev)
     dev->buffers = NULL;
     dev->n_buffers = 0;
 
-    dev->width = 320;
-    dev->height = 240;
+    if(!dev->width)
+        dev->width = 320;
+    if(!dev->height)
+        dev->height = 240;
     dev->fps = 10;
     dev->pixelformat = V4L2_PIX_FMT_YUYV;
     //dev->pixelformat = V4L2_PIX_FMT_BGR24;

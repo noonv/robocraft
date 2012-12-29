@@ -61,6 +61,10 @@ int image_kmeans_colorer(image* src, image* dst, image* cluster_indexes, cv_colo
 
 //--------
 
+// Various color types
+//	    0			1	  2		 3		4		 5		  6		7		8		9			10
+enum {cBLACK=0, cWHITE, cGREY, cRED, cORANGE, cYELLOW, cGREEN, cAQUA, cBLUE, cPURPLE, NUM_COLOR_TYPES};
+
 // Determine what type of color the HSV pixel is. Returns the colorType between 0 and NUM_COLOR_TYPES.
 int hsv_get_pixel_color_type(int H, int S, int V);
 

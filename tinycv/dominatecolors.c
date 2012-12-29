@@ -132,7 +132,7 @@ int image_kmeans_colorer(image* src, image* dst, image* cluster_indexes, cv_colo
 
 // Various color types
 //	    0			1	  2		 3		4		 5		  6		7		8		9			10
-enum {cBLACK=0, cWHITE, cGREY, cRED, cORANGE, cYELLOW, cGREEN, cAQUA, cBLUE, cPURPLE, NUM_COLOR_TYPES};
+//enum {cBLACK=0, cWHITE, cGREY, cRED, cORANGE, cYELLOW, cGREEN, cAQUA, cBLUE, cPURPLE, NUM_COLOR_TYPES};
 char*         sCTypes[NUM_COLOR_TYPES] = {"black","white","grey","red","orange","yellow","green","aqua","blue","purple"};
 unsigned char cCTHue[NUM_COLOR_TYPES]  = {0,       0,      0,     0,     20,      30,      60,    85,   120,    138  };
 unsigned char cCTSat[NUM_COLOR_TYPES]  = {0,       0,      0,    255,   255,     255,     255,   255,   255,    255  };

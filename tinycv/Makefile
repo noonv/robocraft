@@ -28,6 +28,10 @@ $(TARGET): $(OBJECTS)
 
 clean:
 	rm -f *.o $(TARGET)
+	
+debug:
+	make clean
+	make CFLAGSEX="-O0 -g"
 
 mips:
 	make clean
